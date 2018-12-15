@@ -1,0 +1,161 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 from flask import Flask, request, redirect, render_template\
+from database import db, zustand\
+#Database istgleich importiertes modul istgleich python skript\
+# welche die Klasse zustand importiert funktionen k\'f6nnen auch importiert werden\
+\
+\
+# instance of the Flask class, declaring new flask app\
+app = Flask(__name__)\
+\
+#disabling event tracker SQLAlchemy\
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\
+\
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/project1'\
+db.init_app(app)\
+\
+#ROUTING\
+@app.route("/")\
+def index():\
+  return render_template("index.html")\
+\
+# GET request\
+@app.route('/rooms')\
+def rooms():\
+  datas = zustand.query.all()\
+  return render_template('rooms.html',  datas=datas)\
+\
+@app.route('/final')\
+def final():\
+  datas = zustand.query.all()\
+  return render_template('final.html',  datas=datas)\
+  \
+\
+@app.route('/rooms/list')\
+def tableau():\
+  datas = zustand.query.all()\
+  return render_template('list.html',  datas=datas)\
+\
+#post method to send data from client to server site\
+@app.route('/add', methods=['POST'])\
+def add_room():\
+    newroom=zustand(request.form['floor'], request.form['room'], request.form['status'])\
+    db.session.add(newroom)\
+    db.session.commit()\
+    return redirect('/final')\
+\
+#mapping model using id\
+@app.route("/final/delete/<int:id>")\
+def delete_room(id):\
+  room = zustand.query.filter_by(id=id).first()\
+  db.session.delete(room)\
+  db.session.commit()\
+  return redirect('/final')\
+  \
+@app.route("/final/edit/<int:id>")\
+def edit(id):\
+  x = zustand.query.all()\
+  room = zustand.query.filter_by(id=id).first()\
+  return render_template('editroom.html', datas=x, room=room)\
+  \
+  #rooms = zustand.query.all()\
+  #if request.methods =='GET':\
+   # return render_template ('final.html', room=room, rooms=rooms)\
+  #else:\
+   # floor=request.form['floor']\
+    #floor=request.form['room']\
+    #room.update(\{'floor':floor, 'room':room\})\
+    #db.session.commit()\
+    #return redirect('/add')\
+\
+\
+@app.route("/final/update/<int:id>", methods=['POST'])\
+def update(id):\
+  room = zustand.query.filter_by(id=id).first()\
+  room.floor = request.form['floor']\
+  room.status =request.form['status']\
+  room.room =request.form['room']\
+  db.session.commit()\
+  return redirect('/final')\
+\
+    \
+#debug mode for occuring problems and mistake informations when debugging the code \
+if __name__ == "__main__":\
+  app.run(debug=True)\
+\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\
+\
+from flask_sqlalchemy import SQLAlchemy\
+import psycopg2\
+\
+db = SQLAlchemy()\
+\
+#aufrufen der methode connect zur VEerbindung mit der DB\
+\
+conn = psycopg2.connect(\
+  database="project1",\
+  user="postgres",\
+  host="localhost",\
+  port="5432"\
+  )\
+\
+# Ein Cursor wird auf diese Verbindung gesetzt um Befehle zu \'fcbergeben\
+
+# Methode execute aufrufen, die den als Parameter ubergebenen sql Befehl ausf\'fchrt \
+#SQL-Befehl ausfuehren\
+#cur = conn.cursor()\
+#cur.execute("select * from Site1;")\
+\
+# Machen wir gebrauch vom cursor, da dieser nicht geschlossen wird: cursor.close() ?\
+\
+#Definierte Klasse \
+class zustand(db.Model):\
+  __tablename__ = 'site1'\
+  id = db.Column(db.Integer, primary_key = True)\
+  floor = db.Column(db.String(100))\
+  room = db.Column(db.String(100), unique=True)\
+  status = db.Column(db.String(100))\
+  \
+#Funktion bzw Methode mit den dazugeh\'f6rigen Argumenten in ()\
+#In der Funktion/Methode __init__() wird anschlie\'dfend festgelegt,\
+#wie eine neue Instanz der Klasse erzeugt wird.\
+#Die angegebenen Argumente werden dabei als Eigenschaften=Attribute der Instanz,\
+#die in Python mit self bezeichnet wird, gespeichert.\
+\
+\
+  def __init__(self, floor, room, status):\
+    #Attribute der Klasse -> self.xxxx\
+   self.floor = floor\
+   self.room = room \
+   self.status = status \
+\
+cursor.close()\
+conn.close()\
+\
+#row = cur.fetone()\
+#while row is not None:\
+#            print(row)\
+#            row = cur.fetchone()\
+\
+# rows = cur.fetchall()\
+# for row in rows:\
+#	print ("id:",row [0])\
+#	print ("floor:",row [1])\
+#	print ("room:",row [2])\
+#	print ("status:",row [3])\
+#	print ("\\n")\
+\
+\
+#print("DB queries completed")	\
+\
+\
+\
+}

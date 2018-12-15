@@ -1,0 +1,21 @@
+1;Level 1;A102;Living Room
+2;Level 1;A103;Kitchen
+3;Level 1;A104;Bathroom 1
+4;Level 1;A101;Foyer
+5;Level 1;B102;Living Room
+6;Level 1;B103;Kitchen
+7;Level 1;B104;Bathroom 1
+8;Level 1;B101;Foyer
+9;Level 1;A105;Stair
+10;Level 1;B105;Room
+11;Level 2;A201;Hallway
+12;Level 2;A204;Bathroom 2
+13;Level 2;A203;Bedroom 2
+14;Level 2;A202;Bedroom 1
+15;Level 2;B201;Hallway
+16;Level 2;B204;Bathroom 2
+17;Level 2;B203;Bedroom 2
+18;Level 2;B202;Bedroom 1
+19;Level 2;A205;Utility
+20;Level 2;B205;Utility
+21;Roof;R301;Roof

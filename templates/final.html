@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <main class="about-section">
+    <div class="container">
+
+    <h2>Raum hinzufügen</h2>
+    <br>
+    <p> Bitte freie Felder ausfüllen </p>
+
+{% if  rooms %}
+{% for id in rooms %}
+    <form action="/add" method="POST">
+    	Stockwerk: <input type="text" name="floor" value="id.floor">
+    	<br/>
+    	Raum: <input type="text" name="room" value="id.room">
+    	<br/>
+    	Zustand: <select name="status">
+		    		<option>Nicht angefangen</option>
+		            <option>Angefangen</option>
+		            <option>In Bearbeitung</option>
+		            <option>Fertiggestellt</option>
+    			 <select>
+    	<br/>
+    	<input type="submit" name="btn" value="speichern">
+    </form>
+
+{% endfor %}
+{% else %}
+
+	<form action="/add" method="POST">
+    	Stockwerk: <input type="text" name="floor" placeholder="X.OG">
+    	<br/>
+    	Raum: <input type="text" name="room" placeholder="X.XY">
+    	<br/>
+    	Zustand: <select name="status">
+		    		<option value='1'>Nicht angefangen</option>
+		            <option value='2'>Angefangen</option>
+		            <option value='3'>In Bearbeitung</option>
+		            <option value='4'>Fertiggestellt</option>
+    			 <select>
+    	<br/>
+    	<input type="submit" name="btn" value="speichern">
+    </form>
+{% endif %}
+
+    <p>----------------------</p>
+    <!DOCTYPE html>
+        <html>
+        <head>
+        <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even){background-color: #f2f2f2}
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        </style>
+        </head>
+        <body>
+
+        <h2>Projekt-1</h2>
+
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>FLOOR</th>
+            <th>ROOM</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+        <br>
+          </tr>
+
+           {% for zustand in datas %}
+          <tr>
+            <td>{{ zustand.id }}</td>
+            <td>{{ zustand.floor }}</td>
+            <td>{{ zustand.room }}</td>
+            <td>{{ zustand.status }}</td>
+            <td>
+            {% if zustand.status != '4' %}
+              <a href="/final/delete/{{ zustand.id }}">Delete</a>
+              <a href="/final/edit/{{ zustand.id }}">Update</a>
+            {% endif %}
+
+              
+         </td>
+          </tr>
+          {% endfor %}
+        </table>
+
+        </body>
+        </html>
+        <p>----------------------</p>
+	      <br/> 
+	      <a href="/" class="btn-primary">Go Back</a>
+	      <br/>
+	      <br/> 
+    </div>
+  </main>
+{% endblock %}
